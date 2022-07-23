@@ -1,4 +1,4 @@
-# Pivoting Tunneling and Port Forwarding
+# Pivoting Tunneling and Port Forwarding cheat sheet
 
 # Table of content 
 
