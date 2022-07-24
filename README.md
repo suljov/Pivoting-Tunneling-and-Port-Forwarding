@@ -13,6 +13,7 @@
   - [SSH for Windows plink exe](#SSH-for-Windows-plink-exe)
   - [SSH Pivoting with Sshuttle](#SSH-Pivoting-with-Sshuttle)
   - [Web Server Pivoting with Rpivot](#Web-Server-Pivoting-with-Rpivot)
+  - [Port Forwarding with Windows Netsh](#Port-Forwarding-with-Windows-Netsh)
   
   
   
@@ -447,3 +448,33 @@ Connecting to a Web Server using HTTP-Proxy & NTLM Auth
 ```
 python client.py --server-ip <IPaddressofTargetWebServer> --server-port 8080 --ntlm-proxy-ip IPaddressofProxy> --ntlm-proxy-port 8081 --domain <nameofWindowsDomain> --username <username> --password <password>
 ```
+
+## Port Forwarding with Windows Netsh
+```
+https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts
+```
+Netsh is a Windows command-line tool that can help with the network configuration of a particular Windows system. Here are just some of the networking related tasks we can use Netsh for:
+
+    Finding routes
+    Viewing the firewall configuration
+    Adding proxies
+    Creating port forwarding rules
+
+Let's take an example of the below scenario where our compromised host is a Windows 10-based IT admin's workstation (10.129.15.150,172.16.5.25). Keep in mind that it is possible on an engagement that we may gain access to an employee's workstation through methods such as social engineering and phishing. 
+
+We can use netsh.exe to forward all data received on a specific port (say 8080) to a remote host on a remote port. This can be performed using the below command.
+
+Using Netsh.exe to Port Forward
+```
+netsh.exe interface portproxy add v4tov4 listenport=8080 listenaddress=10.129.15.150 connectport=3389 connectaddress=172.16.5.25
+```
+
+Verifying Port Forward
+```
+netsh.exe interface portproxy show v4tov4
+```
+
+After configuring the portproxy on our Windows-based pivot host, we will try to connect to the 8080 port of this host from our attack host using xfreerdp. Once a request is sent from our attack host, the Windows host will route our traffic according to the proxy settings configured by netsh.exe.
+
+
+
