@@ -588,6 +588,12 @@ Before we can use Chisel, we need to have it on our attack host. If we do not ha
 ```
 git clone https://github.com/jpillora/chisel.git
 ```
+even better use this one
+```
+https://github.com/jpillora/chisel/releases?  
+```
+
+
 
 We will need the programming language Go installed on our system to build the Chisel binary. With Go installed on the system, we can move into that directory and use go build to build the Chisel binary.
 ```
