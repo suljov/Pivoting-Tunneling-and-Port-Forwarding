@@ -635,7 +635,8 @@ Editing & Confirming proxychains.conf
 We can use any text editor we would like to edit the proxychains.conf file, then confirm our configuration changes using tail.
 
 example:
-```Suljov@htb[/htb]$ tail -f /etc/proxychains.conf 
+```
+Suljov@htb[/htb]$ tail -f /etc/proxychains.conf 
 
 #
 #       proxy types: http, socks4, socks5
